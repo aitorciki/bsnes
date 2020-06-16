@@ -287,7 +287,7 @@ static void flush_variables()
 		else
 			run_ahead_frames = atoi(variable.value);
 	}
-	
+
 	// Refresh Geometry
 	struct retro_system_av_info avinfo;
 	retro_get_system_av_info(&avinfo);
@@ -551,13 +551,15 @@ RETRO_API void retro_get_system_info(retro_system_info *info)
 
 RETRO_API void retro_get_system_av_info(struct retro_system_av_info *info)
 {
-	info->geometry.base_width  = 512;   // accurate ppu
-	info->geometry.base_height = program->overscan ? 480 : 448; // accurate ppu
-	info->geometry.max_width   = 2048;  // 8x 256 for hd mode 7
-	info->geometry.max_height  = 1920;  // 8x 240
+	uint w = 256;
+	uint h = program->overscan ? 240 : 224;
+	info->geometry.base_width  = w;  // accurate ppu
+	info->geometry.base_height = h;  // accurate ppu
+	info->geometry.max_width   = w * 8;  // 8x 256 for hd mode 7
+	info->geometry.max_height  = h * 8;  // 8x 240
 	info->geometry.aspect_ratio = get_aspect_ratio();
 	info->timing.sample_rate   = SAMPLERATE;
-	
+
 	if (retro_get_region() == RETRO_REGION_NTSC) {
 		info->timing.fps = 21477272.0 / 357366.0;
 		audio_buffer_max = (SAMPLERATE/60) * 2;
